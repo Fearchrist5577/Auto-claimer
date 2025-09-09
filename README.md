@@ -12,6 +12,7 @@ A native desktop app to auto-claim airdrops and auto-forward funds/tokens.
 
 ## Start from zero (new users)
 ### 1) Install Rust
+- Offical website : https://www.rust-lang.org/tools/install
 - Windows (PowerShell):
 ```powershell
 winget install --id Rustlang.Rustup -e
