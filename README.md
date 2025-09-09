@@ -59,17 +59,6 @@ Notes:
 - First run downloads dependencies (may take a few minutes).
 - Binary: `target/release/linea-autoclaim[.exe]`
 
-## Install
-```powershell
-# 1) Install Rust (if not installed)
-#    Visit https://rustup.rs and follow the installer.
-
-# 2) Clone or open the project folder
-cd D:\SynologyDrive\Ai\Linea-autoclaim\linea-autoclaimGUI
-
-# 3) Build & run (release)
-cargo run --release
-```
 The app window will open as “Auto-Claim”.
 
 ## First-time setup
@@ -116,13 +105,6 @@ The app window will open as “Auto-Claim”.
 ## Security notes
 - Private key is stored unencrypted per your project design at `%USERPROFILE%\.linea-autoclaim\keystore.json`.
 - Delete this file to remove the wallet.
-
-## Build
-```powershell
-cd D:\SynologyDrive\Ai\Linea-autoclaim\linea-autoclaimGUI
-cargo build --release
-# Binary at: target\release\linea-autoclaim.exe
-```
 
 ## Troubleshooting
 - Button text color compile error: we use RichText; ensure `eframe = "0.27"`.
