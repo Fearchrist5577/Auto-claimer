@@ -49,7 +49,7 @@ Option A (Git):
 git clone https://github.com/MrFadiAi/Auto-claimer.git
 cd Auto-claimer
 ```
-Option B (ZIP): download ZIP, extract, open `linea-autoclaimGUI` in a terminal.
+Option B (ZIP): download ZIP, extract, open `Auto-claimer` in a terminal.
 
 ### 4) Run the app
 ```bash
