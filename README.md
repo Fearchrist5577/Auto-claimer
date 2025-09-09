@@ -47,7 +47,7 @@ cargo -V
 Option A (Git):
 ```bash
 git clone https://github.com/MrFadiAi/Auto-claimer.git
-cd linea-autoclaim/linea-autoclaimGUI
+cd Auto-claimer
 ```
 Option B (ZIP): download ZIP, extract, open `linea-autoclaimGUI` in a terminal.
 
