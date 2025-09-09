@@ -1,53 +1,90 @@
-Linea Autoclaim (Rust)
+# Auto-Claim GUI (Rust)
 
-Fast CLI to import an EVM wallet, watch for new ETH on Linea, and auto-call `claim()` on the airdrop contract.
+A native desktop app to auto-claim airdrops and auto-forward funds/tokens.
+- Auto Claim tab: watch for ETH deposits and call `claim()` on your airdrop contract, with optional auto-forward of ETH or ERC‑20 tokens.
+- Auto transfer tab: monitor any ERC‑20 token in your wallet and auto-forward to a destination.
+- Settings: RPC, fallbacks (Alchemy/Infura), auto-claim thresholds, wallet import.
 
-Contract: 0x87bAa1694381aE3eCaE2660d97fe60404080Eb64
+## Prerequisites
+- Windows 10/11 (PowerShell) or any OS supported by Rust
+- Rust toolchain (stable): https://rustup.rs
+- Git (optional)
 
-Build
-
+## Install
 ```powershell
-cd D:\SynologyDrive\Ai\Linea-autoclaim\linea-autoclaim
+# 1) Install Rust (if not installed)
+#    Visit https://rustup.rs and follow the installer.
+
+# 2) Clone or open the project folder
+cd D:\SynologyDrive\Ai\Linea-autoclaim\linea-autoclaimGUI
+
+# 3) Build & run (release)
+cargo run --release
+```
+The app window will open as “Auto-Claim”.
+
+## First-time setup
+1) Import wallet (Settings → Wallet Settings):
+   - Paste your private key (0x…), click “Import Wallet”.
+   - Address will be shown. Keystore is saved at `%USERPROFILE%\.linea-autoclaim\keystore.json` (plaintext `pk_hex`).
+
+2) Connection settings (Settings → Connection Settings):
+   - RPC Endpoint: your main RPC (e.g. `https://rpc.linea.build` or Base/others).
+   - Fallback RPCs: one per line (e.g. Alchemy/Infura URLs). The app will try primary, then fallbacks.
+   - Auto-claim Thresholds:
+     - Min deposit (wei): minimum ETH increase to trigger claim (default small number like 1).
+     - Check interval (s): polling interval for auto-claim.
+   - Save Connection Settings.
+
+3) Auto-forward settings (Auto Claim tab):
+   - Airdrop Contract Address: contract exposing no-arg `claim()`.
+   - Claimed token address (optional): ERC‑20 token to forward after claim.
+   - Destination address: where ETH/tokens will be sent.
+   - Gas reserve (wei): keep this amount to cover gas; remainder forwarded.
+   - Click “Save Auto-forward Settings”.
+
+## Using the app
+### Auto Claim tab
+- Start Auto-claim: enters watch mode. When a deposit ≥ Min deposit is detected, it calls `claim()` and (if enabled) auto‑forwards.
+- Stop Auto-claim: stops the watcher.
+- Claim Now: sends `claim()` immediately and (if enabled) auto‑forwards.
+- Logs panel (right): shows RPC selection, claim progress, forwarding results.
+
+### Auto transfer tab
+- Enter an ERC‑20 token address to monitor.
+- Interval (s): how often to check your token balance (default 1s or your setting).
+- Start: polls balance; if > 0, forwards full balance to destination with detailed logs.
+- Stop: cancels watcher.
+
+## RPC fallback behavior
+- On every operation, the app tries the primary RPC, then each fallback.
+- Health check: 3s timeout on `chainId`. Logs which endpoint is used.
+
+## Network & balance indicators
+- Wallet Status shows current network (by chainId) and balance on the selected RPC.
+- Refreshes automatically ~every 20s and on RPC change.
+
+## Security notes
+- Private key is stored unencrypted per your project design at `%USERPROFILE%\.linea-autoclaim\keystore.json`.
+- Delete this file to remove the wallet.
+
+## Build
+```powershell
+cd D:\SynologyDrive\Ai\Linea-autoclaim\linea-autoclaimGUI
 cargo build --release
+# Binary at: target\release\linea-autoclaim.exe
 ```
 
-Binary: `target\release\linea-autoclaim.exe`
+## Troubleshooting
+- Button text color compile error: we use RichText; ensure `eframe = "0.27"`.
+- Rate limits: reduce intervals or add private RPCs. For real-time, use WebSocket RPCs (future enhancement).
+- Claim reverts: verify airdrop contract, allocation, and that address hasn’t claimed yet.
 
-Commands
-
-1) Import wallet (private key hex)
-
-```powershell
-target\release\linea-autoclaim.exe import --pk-hex 0xyourprivatekeyhex
-```
-
-2) Show address (fund this with ETH on Linea)
-
-```powershell
-target\release\linea-autoclaim.exe address
-```
-
-3) Watch balance and auto-claim
-
-```powershell
-target\release\linea-autoclaim.exe --rpc https://rpc.linea.build watch-and-claim --min-delta-wei 1 --interval 8
-```
-
-4) Manual claim now
-
-```powershell
-target\release\linea-autoclaim.exe --rpc https://rpc.linea.build claim
-```
-
-Keystore
-
-- Stored at `%USERPROFILE%\.linea-autoclaim\keystore.json`
-- Plaintext JSON containing `pk_hex` (no password). Delete to remove the wallet.
-
-Notes
-
-- Default RPC is `https://rpc.linea.build`. Override with `--rpc`.
-- Assumes contract exposes a no-arg `claim()`.
-- Delete the keystore file to remove the wallet.
+## Credits & Donate
+- Built by MrCrypto — Twitter: https://x.com/Mr_CryptoYT
+- Donate:
+  - ETH: `0x519e9aa581E8A00cf4aa51ffc85B5E2BD2BECA75`
+  - SOL: `5FW6WHGZFReH7XYHezhZijxPNtDVZjVLr3xffHrTFtzS`
+  - BTC: `33vsHnSafGMV6atqAqppDEBiFenCipQ4do`
 
 
