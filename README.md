@@ -10,6 +10,55 @@ A native desktop app to auto-claim airdrops and auto-forward funds/tokens.
 - Rust toolchain (stable): https://rustup.rs
 - Git (optional)
 
+## Start from zero (new users)
+### 1) Install Rust
+- Windows (PowerShell):
+```powershell
+winget install --id Rustlang.Rustup -e
+rustup default stable
+```
+If asked for MSVC build tools, install “Desktop development with C++” via Visual Studio Build Tools: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+- macOS (Terminal):
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+```
+
+- Ubuntu/Debian (Terminal):
+```bash
+sudo apt update && sudo apt install -y build-essential curl pkg-config libssl-dev
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+```
+
+Verify:
+```bash
+rustc -V
+cargo -V
+```
+
+### 2) Install Git (if needed)
+- Windows: `winget install Git.Git`
+- macOS: `brew install git`
+- Ubuntu/Debian: `sudo apt install -y git`
+
+### 3) Get the project
+Option A (Git):
+```bash
+git clone <your-repo-url>
+cd linea-autoclaim/linea-autoclaimGUI
+```
+Option B (ZIP): download ZIP, extract, open `linea-autoclaimGUI` in a terminal.
+
+### 4) Run the app
+```bash
+cargo run --release
+```
+Notes:
+- First run downloads dependencies (may take a few minutes).
+- Binary: `target/release/linea-autoclaim[.exe]`
+
 ## Install
 ```powershell
 # 1) Install Rust (if not installed)
