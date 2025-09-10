@@ -10,6 +10,17 @@ use zeroize::Zeroize;
 
 const DEFAULT_RPC: &str = "https://rpc.linea.build";
 const DEFAULT_CONTRACT: &str = "0x7ec77150b33910a9c33b7e3881b84b254060dfb5";
+const BUSY_IDLE_SENTINEL: &str = "__IDLE__";
+
+struct OnExitIdle {
+    tx: Sender<String>,
+}
+
+impl Drop for OnExitIdle {
+    fn drop(&mut self) {
+        let _ = self.tx.send(BUSY_IDLE_SENTINEL.to_string());
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone)]
 struct KeystoreFile {
@@ -113,13 +124,38 @@ async fn claim_airdrop(
     }
 
     let tx = contract.claim();
-    let pending = tx
-        .send()
-        .await
-        .map_err(|e| anyhow::anyhow!("claim() send failed: {e}"))?;
+    // Retry send on transient RPC failures (e.g., -32603 service unavailable, rate limits)
+    let pending = {
+        let mut backoff_ms: u64 = 300;
+        let max_attempts: u32 = 5;
+        let mut attempt: u32 = 1;
+        loop {
+            match tx.send().await {
+                Ok(p) => break Ok(p),
+                Err(e) => {
+                    let es = e.to_string();
+                    let is_transient = es.contains("temporarily unavailable")
+                        || es.contains("Service Unavailable")
+                        || es.contains("-32603")
+                        || es.contains("rate limit")
+                        || es.contains("429")
+                        || es.contains("timeout")
+                        || es.contains("connection");
+                    if attempt < max_attempts && is_transient {
+                        tokio::time::sleep(Duration::from_millis(backoff_ms)).await;
+                        backoff_ms = (backoff_ms.saturating_mul(2)).min(5_000);
+                        attempt += 1;
+                        continue;
+                    }
+                    break Err(anyhow::anyhow!("claim() send failed: {es}"));
+                }
+            }
+        }
+    }?;
 
-    if let Some(rcpt) = pending
+    if let Some(rcpt) = tokio::time::timeout(Duration::from_secs(90), pending)
         .await
+        .map_err(|_| anyhow::anyhow!("claim() pending timed out after 90s"))?
         .map_err(|e| anyhow::anyhow!("claim() pending failed: {e}"))?
     {
         if rcpt.status == Some(U64::from(1u64)) {
@@ -342,7 +378,8 @@ impl GuiApp {
 impl eframe::App for GuiApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         while let Ok(line) = self.log_rx.try_recv() {
-            self.status_lines.push(line);
+            if line == BUSY_IDLE_SENTINEL { self.is_busy = false; }
+            else { self.status_lines.push(line); }
         }
         while let Ok(b) = self.balance_rx.try_recv() {
             self.balance_text = b;
@@ -758,6 +795,7 @@ impl GuiApp {
                             let token_address = self.token_address.clone();
                             self.is_busy = true;
                             self.runtime.spawn(async move {
+                                let _on_exit = OnExitIdle { tx: tx.clone() };
                                 let _ = tx.send("🚀 Starting claim…".to_string());
                                 let provider = match GuiApp::build_provider_with_fallback(rpc.clone(), fallbacks.clone(), tx.clone()).await {
                                     Some(p) => p,
